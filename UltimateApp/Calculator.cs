@@ -37,7 +37,7 @@ namespace UltimateApp
 
         private static int Modulo(int a, int b)
         {
-            return a /b;
+            return a % b;
         }
 
         public static int? calculate(int a, int b, Operation o)
@@ -57,7 +57,7 @@ namespace UltimateApp
                     return Divide(a, b);
 
                 case Operation.Modulo:
-                    return Divide(a, b);
+                    return Modulo(a, b);
 
                 default:
                     return null;
