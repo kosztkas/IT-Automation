@@ -24,7 +24,14 @@ jobs:
       run: dotnet build --no-restore
       
     - name: Test
-      run: dotnet test --no-restore --verbosity normal --logger trx --results-directory "TestResults"
+      run: dotnet test --no-restore --verbosity normal --logger trx --results-directory "TestResults" /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
+      
+    - uses: codecov/codecov-action@v2
+      with:
+        flags: unittests
+        name: codecov-umbrella
+        fail_ci_if_error: true
+        verbose: true  
       
 #    - name: Create Release
 #      uses: ncipollo/release-action@v1.10.0
@@ -40,6 +47,6 @@ jobs:
         name: Test Results on dev
         path: ./TestResults/*.trx
         reporter: dotnet-trx
-        
+      
 
       
