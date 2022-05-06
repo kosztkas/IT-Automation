@@ -22,12 +22,12 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal
       
-    - name: Create Release
-      uses: ncipollo/release-action@v1.10.0
-      with:
-       tag: "1.0"
-       token: ${{ secrets.GITHUB_TOKEN }}
-       artifacts: "./UltimateApp/bin/Release/netcoreapp3.1/UltimateApp"
+#    - name: Create Release
+#      uses: ncipollo/release-action@v1.10.0
+#      with:
+#       tag: "1.0"
+#       token: ${{ secrets.GITHUB_TOKEN }}
+#       artifacts: "./UltimateApp/bin/Release/netcoreapp3.1/UltimateApp"
 
     - name: Publish Test
       uses: dorny/test-reporter@v1
