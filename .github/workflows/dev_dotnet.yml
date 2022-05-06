@@ -26,13 +26,22 @@ jobs:
     - name: Test
       run: dotnet test --no-restore --verbosity normal --logger trx --results-directory "TestResults" /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
       
+    - name: Create an Issue
+      if: failure()
+      uses: JasonEtco/create-an-issue@v2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        filename: .github/ultimate_issue_template.md 
+    
     - uses: codecov/codecov-action@v2
       with:
         flags: unittests
         name: codecov-umbrella
         fail_ci_if_error: true
-        verbose: true  
-      
+        verbose: true
+        
+#      Don't make a release on dev brach
 #    - name: Create Release
 #      uses: ncipollo/release-action@v1.10.0
 #      with:
