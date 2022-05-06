@@ -1,0 +1,66 @@
+name: .NET
+
+on:
+  push:
+    branches: [ dev ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+       dotnet-version: 3.1.x
+       
+    - name: Restore dependencies
+      run: dotnet restore
+      
+    - name: Build
+      run: dotnet build --no-restore
+      
+    - name: Test
+      run: dotnet test --no-restore --verbosity normal --logger trx --results-directory "TestResults" /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
+      
+    - name: Create an Issue
+      if: failure()
+      uses: JasonEtco/create-an-issue@v2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        filename: .github/ultimate_issue_template.md 
+    
+    - uses: codecov/codecov-action@v2
+      with:
+        flags: unittests
+        name: codecov-umbrella
+        fail_ci_if_error: true
+        verbose: true
+        
+#      Don't make a release on dev brach
+#    - name: Create Release
+#      uses: ncipollo/release-action@v1.10.0
+#      with:
+#       tag: "1.0"
+#       token: ${{ secrets.GITHUB_TOKEN }}
+#       artifacts: "./UltimateApp/bin/Release/netcoreapp3.1/UltimateApp"
+
+    - name: Publish Test
+      uses: dorny/test-reporter@v1
+      if: always()
+      with:
+        name: Test Results on dev
+        path: ./TestResults/*.trx
+        reporter: dotnet-trx
+      
+    - name: Pull request
+      uses: repo-sync/pull-request@v2
+      with:
+       destination_branch: "main"
+       github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      
