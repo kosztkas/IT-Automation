@@ -42,7 +42,7 @@ namespace UltimateApp.Test
         public void ModuloTest()
         {
             int? retVal = Calculator.calculate(10, 5, Operation.Modulo);
-            Assert.AreEqual(1, retVal);
+            Assert.AreEqual(0, retVal);
         }
     }
 }
