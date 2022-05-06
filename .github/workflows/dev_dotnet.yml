@@ -37,4 +37,5 @@ jobs:
         path: ./TestResults/*.trx
         reporter: dotnet-trx
         
-    
+    - name: Test
+      run: dotnet test --no-restore --verbosity normal --logger trx --results-directory "TestResults"
